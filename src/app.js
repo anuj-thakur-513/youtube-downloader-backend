@@ -18,4 +18,4 @@ app.use(morgan("dev"));
 
 app.use("/api/download", downloadRouter);
 
-export default app;
+module.exports = app;

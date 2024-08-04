@@ -4,4 +4,4 @@ function asyncHandler(asyncFunction) {
   };
 }
 
-export default asyncHandler;
+module.exports = asyncHandler;

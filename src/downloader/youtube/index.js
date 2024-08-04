@@ -9,7 +9,7 @@ const { downloadPlaylist, downloadVideo } = require("./youtubeDownloader");
 
 let youtubeClient = null;
 function generateYoutubeClient() {
-  if (!youtube) {
+  if (!youtubeClient) {
     youtubeClient = new Client();
   }
   return youtubeClient;
@@ -17,7 +17,7 @@ function generateYoutubeClient() {
 
 let DEFAULT_VIDEOS_COUNT = 100;
 
-async function main(url) {
+async function download(url) {
   try {
     const youtube = generateYoutubeClient();
     if (isPlaylist(url)) {
@@ -35,15 +35,17 @@ async function main(url) {
       );
 
       await downloadPlaylist(playlist);
+      return playlist.title;
     } else {
       const VIDEO_ID = getVideoId(url);
       const video = await youtube.getVideo(VIDEO_ID);
       console.log("Downloading", video.title);
       await downloadVideo(url, video.title);
+      return video.title;
     }
   } catch (error) {
-    console.error("An error occurred:", error);
+    console.error("An error occurred while downloading:", error);
   }
 }
 
-export default main;
+module.exports = download;
