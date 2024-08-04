@@ -50,7 +50,7 @@ async function downloadVideo(videoUrl, videoTitle) {
       .on("error", reject);
   });
 
-  console.log("\nMerging audio and video");
+  console.log("Merging audio and video");
   // Merge video and audio using ffmpeg with progress
   return new Promise((resolve, reject) => {
     ffmpeg()

@@ -10,6 +10,7 @@ app.use(
   cors({
     origin: true,
     credentials: true,
+    exposedHeaders: ["X-File-Title"],
   })
 );
 app.use(express.json({ limit: "50kb" }));
