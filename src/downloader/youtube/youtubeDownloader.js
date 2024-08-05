@@ -2,6 +2,7 @@ const fs = require("fs");
 const ytdl = require("@distube/ytdl-core");
 const ffmpeg = require("fluent-ffmpeg");
 const path = require("path");
+const archive = require("../../utils/archive");
 
 async function downloadVideo(videoUrl, videoTitle) {
   const info = await ytdl.getInfo(videoUrl);
@@ -76,16 +77,21 @@ async function downloadVideo(videoUrl, videoTitle) {
 
 async function downloadPlaylist(data) {
   let curr = 0;
+  const now = Date.now();
 
   while (curr < data.videos.items.length) {
     const videoData = data.videos.items[curr];
     const videoId = videoData.id;
-    const videoTitle = `${curr + 1}. ${videoData.title}`;
+    const videoTitle = `${curr + 1}. ${videoData.title}_${now}`;
     const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
     console.log("downloading:", videoTitle);
     await downloadVideo(videoUrl, videoTitle);
     curr++;
   }
+
+  const downloadPath = path.resolve(__dirname, "downloads");
+  await archive(now, data, downloadPath);
+  return now;
 }
 
 module.exports = { downloadPlaylist, downloadVideo };

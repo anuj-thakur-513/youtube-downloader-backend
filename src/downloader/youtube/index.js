@@ -15,14 +15,14 @@ function generateYoutubeClient() {
   return youtubeClient;
 }
 
-let DEFAULT_VIDEOS_COUNT = 100;
-
 async function download(url) {
   try {
     const youtube = generateYoutubeClient();
     if (isPlaylist(url)) {
       const PLAYLIST_ID = getPlaylistId(url);
       const playlist = await youtube.getPlaylist(PLAYLIST_ID);
+
+      let DEFAULT_VIDEOS_COUNT = 100;
 
       while (playlist.videos.items.length === DEFAULT_VIDEOS_COUNT) {
         await playlist.videos.next();
@@ -34,8 +34,8 @@ async function download(url) {
         playlist.videos.items.length
       );
 
-      await downloadPlaylist(playlist);
-      return playlist.title;
+      const key = await downloadPlaylist(playlist);
+      return `${key}_${playlist.title}`;
     } else {
       const VIDEO_ID = getVideoId(url);
       const video = await youtube.getVideo(VIDEO_ID);
