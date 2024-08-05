@@ -18,17 +18,19 @@
   "homepage": "https://github.com/anuj-thakur-513/youtube-downloader-backend#readme",
   "description": "",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.623.0",
     "@distube/ytdl-core": "^4.14.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "fluent-ffmpeg": "^2.1.3",
     "morgan": "^1.10.0",
+    "node-cron": "^3.0.3",
     "youtubei": "^1.5.4",
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.25",
+    "@types/node-cron": "^3.0.11",
     "nodemon": "^3.1.4"
   }
 }
