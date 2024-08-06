@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function archive(key, playlist, downloadPath) {
-  const outputPath = `${downloadPath}/${playlist.title}.zip`;
+  const outputPath = `${downloadPath}/${playlist.title}_${key}.zip`;
   const output = fs.createWriteStream(outputPath);
 
   const archive = archiver("zip", {

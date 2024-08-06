@@ -35,13 +35,13 @@ async function download(url) {
       );
 
       const key = await downloadPlaylist(playlist);
-      return `${key}_${playlist.title}`;
+      return `${playlist.title}_${key}.zip`;
     } else {
       const VIDEO_ID = getVideoId(url);
       const video = await youtube.getVideo(VIDEO_ID);
       console.log("Downloading", video.title);
       await downloadVideo(url, video.title);
-      return video.title;
+      return `${video.title}.mp4`;
     }
   } catch (error) {
     console.error("An error occurred while downloading:", error);

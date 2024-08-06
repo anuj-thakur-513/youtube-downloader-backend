@@ -2,6 +2,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../core/ApiError");
 const download = require("../downloader/youtube");
 const path = require("path");
+const { createReadStream, unlinkSync } = require("fs");
 
 const handleDownloadYoutube = asyncHandler(async (req, res) => {
   const url = req.query.url;
@@ -10,18 +11,26 @@ const handleDownloadYoutube = asyncHandler(async (req, res) => {
   }
 
   const downloadedFile = await download(url);
-
   const filePath = path.resolve(
     __dirname,
     "..",
     "downloader",
     "youtube",
     "downloads",
-    `${downloadedFile}.mp4`
+    `${downloadedFile}`
   );
+
   res.setHeader("X-File-Title", downloadedFile);
 
-  return res.status(200).download(filePath);
+  const readStream = createReadStream(filePath);
+  readStream.pipe(res);
+  readStream.on("end", () => {
+    unlinkSync(filePath);
+  });
+  readStream.on("error", (err) => {
+    console.error("Error while sending file:", err);
+    res.status(500).send("Error while sending file.");
+  });
 });
 
 module.exports = { handleDownloadYoutube };

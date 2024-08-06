@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.25",
+    "@types/morgan": "^1.9.9",
     "@types/node-cron": "^3.0.11",
     "nodemon": "^3.1.4"
   }
