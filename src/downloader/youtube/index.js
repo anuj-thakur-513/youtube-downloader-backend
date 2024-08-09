@@ -1,5 +1,4 @@
-const { Client } = require("youtubei");
-
+const getYoutubeClient = require("../../config/youtubeClient");
 const {
   getPlaylistId,
   getVideoId,
@@ -7,17 +6,9 @@ const {
 } = require("../../utils/youtube");
 const { downloadPlaylist, downloadVideo } = require("./youtubeDownloader");
 
-let youtubeClient = null;
-function generateYoutubeClient() {
-  if (!youtubeClient) {
-    youtubeClient = new Client();
-  }
-  return youtubeClient;
-}
-
 async function download(url) {
   try {
-    const youtube = generateYoutubeClient();
+    const youtube = getYoutubeClient();
     if (isPlaylist(url)) {
       const PLAYLIST_ID = getPlaylistId(url);
       const playlist = await youtube.getPlaylist(PLAYLIST_ID);

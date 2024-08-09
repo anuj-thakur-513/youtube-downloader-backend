@@ -2,7 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 
-const downloadRouter = require("./routes/downloadRoutes");
+const videoRouter = require("./routes/videoRoutes");
 
 const app = express();
 
@@ -17,6 +17,6 @@ app.use(express.json({ limit: "50kb" }));
 app.use(express.urlencoded({ extended: false, limit: "50kb" }));
 app.use(morgan("dev"));
 
-app.use("/api/download", downloadRouter);
+app.use("/api/video", videoRouter);
 
 module.exports = app;
