@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { Client } = require("youtubei");
 const ytdl = require("@distube/ytdl-core");
 

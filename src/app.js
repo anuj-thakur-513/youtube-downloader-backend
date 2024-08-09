@@ -19,4 +19,9 @@ app.use(morgan("dev"));
 
 app.use("/api/video", videoRouter);
 
+// health check route
+app.use("/healthCheck", (req, res) => {
+  res.send("<h1>The API service is working fine</h1>");
+});
+
 module.exports = app;
