@@ -11,7 +11,7 @@ const {
   isPlaylist,
   getPlaylistId,
 } = require("../utils/youtube");
-const getYoutubeClient = require("../config/youtubeClient");
+const { getYoutubeClient, getYtdlAgent } = require("../config/youtubeClient");
 
 const handleDownloadYoutube = asyncHandler(async (req, res) => {
   const { url, quality } = req.body;
@@ -82,7 +82,7 @@ const handleGetVideoDetails = asyncHandler(async (req, res) => {
       { itag: "Low Quality", qualityLabel: "Low Quality" }
     );
   } else {
-    fetchedDetails = await ytdl.getInfo(url);
+    fetchedDetails = await ytdl.getInfo(url, { agent: getYtdlAgent() });
     details.title = fetchedDetails?.videoDetails?.title;
     details.thumbnail = fetchedDetails?.videoDetails?.thumbnails.reduce(
       (highest, current) => {

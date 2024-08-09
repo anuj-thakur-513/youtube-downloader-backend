@@ -2,10 +2,12 @@ const fs = require("fs");
 const ytdl = require("@distube/ytdl-core");
 const ffmpeg = require("fluent-ffmpeg");
 const path = require("path");
+
 const archive = require("../../utils/archive");
+const { getYtdlAgent } = require("../../config/youtubeClient");
 
 async function downloadVideo(videoUrl, videoTitle, qualityItag) {
-  const info = await ytdl.getInfo(videoUrl);
+  const info = await ytdl.getInfo(videoUrl, { agent: getYtdlAgent() });
   /**
    * Qualities/Formats that can be added:
    * 'lowest' | 'highest' | 'highestaudio' | 'lowestaudio' | 'highestvideo' | 'lowestvideo'

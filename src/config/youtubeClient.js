@@ -1,4 +1,5 @@
 const { Client } = require("youtubei");
+const ytdl = require("@distube/ytdl-core");
 
 let youtubeClient = null;
 function getYoutubeClient() {
@@ -8,4 +9,12 @@ function getYoutubeClient() {
   return youtubeClient;
 }
 
-module.exports = getYoutubeClient;
+let ytdlAgent = null;
+function getYtdlAgent() {
+  if (!ytdlAgent) {
+    ytdl.createAgent(JSON.parse(fs.readFileSync("./youtubeCookies.json")));
+  }
+  return ytdlAgent;
+}
+
+module.exports = { getYoutubeClient, getYtdlAgent };

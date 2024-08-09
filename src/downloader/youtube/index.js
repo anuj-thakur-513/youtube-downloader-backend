@@ -1,4 +1,4 @@
-const getYoutubeClient = require("../../config/youtubeClient");
+const { getYoutubeClient } = require("../../config/youtubeClient");
 const {
   getPlaylistId,
   getVideoId,
