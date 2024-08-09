@@ -25,8 +25,8 @@ async function download(url, qualityItag) {
         playlist.videos.items.length
       );
 
-      const key = await downloadPlaylist(playlist);
-      return `${playlist.title}_${key}.zip`;
+      const key = await downloadPlaylist(playlist, qualityItag);
+      return `${playlist.title}_${key}_${qualityItag}.zip`;
     } else {
       const VIDEO_ID = getVideoId(url);
       const video = await youtube.getVideo(VIDEO_ID);

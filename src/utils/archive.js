@@ -2,8 +2,8 @@ const archiver = require("archiver");
 const fs = require("fs");
 const path = require("path");
 
-async function archive(key, playlist, downloadPath) {
-  const outputPath = `${downloadPath}/${playlist.title}_${key}.zip`;
+async function archive(key, playlist, downloadPath, qualityItag) {
+  const outputPath = `${downloadPath}/${playlist.title}_${key}_${qualityItag}.zip`;
   const output = fs.createWriteStream(outputPath);
 
   const archive = archiver("zip", {
@@ -14,7 +14,7 @@ async function archive(key, playlist, downloadPath) {
     for (let i = 0; i < playlist.videos.items.length; i++) {
       const filePath = path.join(
         downloadPath,
-        `${i + 1}. ${playlist.videos.items[i].title}_${key}.mp4`
+        `${i + 1}. ${playlist.videos.items[i].title}_${key}_${qualityItag}.mp4`
       );
       fs.unlink(filePath, (err) => {
         if (err) {
@@ -48,10 +48,10 @@ async function archive(key, playlist, downloadPath) {
     const currentVideo = playlist.videos.items[i];
     const filePath = path.join(
       downloadPath,
-      `${i + 1}. ${currentVideo.title}_${key}.mp4`
+      `${i + 1}. ${currentVideo.title}_${key}_${qualityItag}.mp4`
     );
     archive.append(fs.createReadStream(filePath), {
-      name: `${i + 1}. ${currentVideo.title}.mp4`,
+      name: `${i + 1}. ${currentVideo.title}_${qualityItag}.mp4`,
     });
   }
 

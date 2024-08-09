@@ -19,6 +19,59 @@ async function downloadVideo(videoUrl, videoTitle, qualityItag) {
     videoFormat = info.formats.find(
       (format) => format.itag === parseInt(qualityItag)
     );
+  } else {
+    let qualityLabels;
+    switch (qualityItag) {
+      case "High Quality":
+        qualityLabels = [
+          "4320p",
+          "4320p60",
+          "2160p",
+          "2160p60",
+          "2160p60 HDR",
+          "1440p",
+          "1440p60",
+          "1440p60 HDR",
+          "1080p",
+          "1080p60",
+          "1080p60 HDR",
+        ];
+        break;
+      case "Medium Quality":
+        qualityLabels = ["720p", "720p60", "720p60 HDR", "480p", "480p60 HDR"];
+        break;
+      case "Low Quality":
+        qualityLabels = [
+          "360p",
+          "360p60 HDR",
+          "270p",
+          "240p",
+          "240p60 HDR",
+          "144p",
+          "144p 15fps",
+          "144p60 HDR",
+        ];
+        break;
+      default:
+        return null;
+    }
+
+    const filteredFormats = info.formats
+      .filter((format) => qualityLabels.includes(format.qualityLabel))
+      .sort((a, b) => {
+        // Sort by quality label index in qualityLabels array
+        const qualityIndexA = qualityLabels.indexOf(a.qualityLabel);
+        const qualityIndexB = qualityLabels.indexOf(b.qualityLabel);
+
+        if (qualityIndexA !== qualityIndexB) {
+          return qualityIndexA - qualityIndexB;
+        }
+
+        // If same quality label, sort by bitrate (ascending)
+        return a.bitrate - b.bitrate;
+      });
+
+    videoFormat = filteredFormats[0];
   }
   const videoPath = path.resolve(
     __dirname,
@@ -38,6 +91,7 @@ async function downloadVideo(videoUrl, videoTitle, qualityItag) {
 
   // Download video
   await new Promise((resolve, reject) => {
+    console.log(videoFormat);
     ytdl(videoUrl, { quality: videoFormat.itag })
       .pipe(fs.createWriteStream(videoPath))
       .on("finish", () => {
@@ -82,7 +136,7 @@ async function downloadVideo(videoUrl, videoTitle, qualityItag) {
   });
 }
 
-async function downloadPlaylist(data) {
+async function downloadPlaylist(data, qualityItag) {
   let curr = 0;
   const now = Date.now();
 
@@ -92,12 +146,12 @@ async function downloadPlaylist(data) {
     const videoTitle = `${curr + 1}. ${videoData.title}_${now}`;
     const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
     console.log("downloading:", videoTitle);
-    await downloadVideo(videoUrl, videoTitle);
+    await downloadVideo(videoUrl, videoTitle, qualityItag);
     curr++;
   }
 
   const downloadPath = path.resolve(__dirname, "downloads");
-  await archive(now, data, downloadPath);
+  await archive(now, data, downloadPath, qualityItag);
   return now;
 }
 
