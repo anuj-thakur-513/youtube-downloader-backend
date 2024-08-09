@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 const { Client } = require("youtubei");
 const ytdl = require("@distube/ytdl-core");
 
@@ -13,7 +14,11 @@ function getYoutubeClient() {
 let ytdlAgent = null;
 function getYtdlAgent() {
   if (!ytdlAgent) {
-    ytdl.createAgent(JSON.parse(fs.readFileSync("./youtubeCookies.json")));
+    ytdl.createAgent(
+      JSON.parse(
+        fs.readFileSync(path.resolve(__dirname, "youtubeCookies.json"))
+      )
+    );
   }
   return ytdlAgent;
 }
