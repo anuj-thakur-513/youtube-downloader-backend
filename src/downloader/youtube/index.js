@@ -6,7 +6,7 @@ const {
 } = require("../../utils/youtube");
 const { downloadPlaylist, downloadVideo } = require("./youtubeDownloader");
 
-async function download(url) {
+async function download(url, qualityItag) {
   try {
     const youtube = getYoutubeClient();
     if (isPlaylist(url)) {
@@ -31,8 +31,8 @@ async function download(url) {
       const VIDEO_ID = getVideoId(url);
       const video = await youtube.getVideo(VIDEO_ID);
       console.log("Downloading", video.title);
-      await downloadVideo(url, video.title);
-      return `${video.title}.mp4`;
+      await downloadVideo(url, video.title, qualityItag);
+      return `${video.title}_${qualityItag}.mp4`;
     }
   } catch (error) {
     console.error("An error occurred while downloading:", error);

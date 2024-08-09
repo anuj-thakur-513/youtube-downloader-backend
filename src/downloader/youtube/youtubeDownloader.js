@@ -4,7 +4,7 @@ const ffmpeg = require("fluent-ffmpeg");
 const path = require("path");
 const archive = require("../../utils/archive");
 
-async function downloadVideo(videoUrl, videoTitle) {
+async function downloadVideo(videoUrl, videoTitle, qualityItag) {
   const info = await ytdl.getInfo(videoUrl);
   /**
    * Qualities/Formats that can be added:
@@ -13,10 +13,13 @@ async function downloadVideo(videoUrl, videoTitle) {
   const audioFormat = ytdl.chooseFormat(info.formats, {
     quality: "highestaudio",
   });
-  const videoFormat = ytdl.chooseFormat(info.formats, {
-    quality: "highestvideo",
-  });
-
+  let videoFormat;
+  if (!isNaN(qualityItag)) {
+    console.log(qualityItag);
+    videoFormat = info.formats.find(
+      (format) => format.itag === parseInt(qualityItag)
+    );
+  }
   const videoPath = path.resolve(
     __dirname,
     "downloads",
@@ -27,7 +30,11 @@ async function downloadVideo(videoUrl, videoTitle) {
     "downloads",
     `${videoTitle}_audio.mp4`
   );
-  const outputPath = path.resolve(__dirname, "downloads", `${videoTitle}.mp4`);
+  const outputPath = path.resolve(
+    __dirname,
+    "downloads",
+    `${videoTitle}_${qualityItag}.mp4`
+  );
 
   // Download video
   await new Promise((resolve, reject) => {

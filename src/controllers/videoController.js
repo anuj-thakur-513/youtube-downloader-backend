@@ -1,6 +1,6 @@
 const ytdl = require("@distube/ytdl-core");
 const path = require("path");
-const { createReadStream } = require("fs");
+const { createReadStream, unlinkSync } = require("fs");
 
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../core/ApiError");
@@ -14,15 +14,18 @@ const {
 const getYoutubeClient = require("../config/youtubeClient");
 
 const handleDownloadYoutube = asyncHandler(async (req, res) => {
-  const { url } = req.query;
+  const { url, quality } = req.body;
   if (!url || !isValidYoutubeURL(url)) {
     throw new ApiError(
       400,
       "A valid youtube video or playlist URL is required"
     );
   }
+  if (!quality) {
+    throw new ApiError(400, "Quality of the video is required");
+  }
 
-  const downloadedFile = await download(url);
+  const downloadedFile = await download(url, quality);
   const filePath = path.resolve(
     __dirname,
     "..",
@@ -39,6 +42,11 @@ const handleDownloadYoutube = asyncHandler(async (req, res) => {
   readStream.on("error", (err) => {
     console.error("Error while sending file:", err);
     res.status(500).send("Error while sending file.");
+  });
+  readStream.on("end", (err) => {
+    if (!err) {
+      unlinkSync(filePath);
+    }
   });
 });
 

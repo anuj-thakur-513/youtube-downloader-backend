@@ -3,10 +3,10 @@ const { Router } = require("express");
 const {
   handleDownloadYoutube,
   handleGetVideoDetails,
-} = require("../controllers/downloadController");
+} = require("../controllers/videoController");
 
 const videoRouter = Router();
-videoRouter.get("/download", handleDownloadYoutube);
+videoRouter.post("/download", handleDownloadYoutube);
 videoRouter.get("/details", handleGetVideoDetails);
 
 module.exports = videoRouter;
