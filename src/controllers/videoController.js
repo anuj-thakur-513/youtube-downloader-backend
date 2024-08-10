@@ -82,6 +82,7 @@ const handleGetVideoDetails = asyncHandler(async (req, res) => {
       { itag: "Low Quality", qualityLabel: "Low Quality" }
     );
   } else {
+    // TODO: don't return a quality if it doesn't have a quality Label
     const agent = getYtdlAgent();
     fetchedDetails = await ytdl.getInfo(url, { agent });
     details.title = fetchedDetails?.videoDetails?.title;
