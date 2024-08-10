@@ -82,7 +82,8 @@ const handleGetVideoDetails = asyncHandler(async (req, res) => {
       { itag: "Low Quality", qualityLabel: "Low Quality" }
     );
   } else {
-    fetchedDetails = await ytdl.getInfo(url, { agent: getYtdlAgent() });
+    const agent = getYtdlAgent();
+    fetchedDetails = await ytdl.getInfo(url, { agent });
     details.title = fetchedDetails?.videoDetails?.title;
     details.thumbnail = fetchedDetails?.videoDetails?.thumbnails.reduce(
       (highest, current) => {

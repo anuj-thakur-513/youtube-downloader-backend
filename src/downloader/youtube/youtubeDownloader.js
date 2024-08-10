@@ -7,7 +7,8 @@ const archive = require("../../utils/archive");
 const { getYtdlAgent } = require("../../config/youtubeClient");
 
 async function downloadVideo(videoUrl, videoTitle, qualityItag) {
-  const info = await ytdl.getInfo(videoUrl, { agent: getYtdlAgent() });
+  const agent = getYtdlAgent();
+  const info = await ytdl.getInfo(videoUrl, { agent });
   /**
    * Qualities/Formats that can be added:
    * 'lowest' | 'highest' | 'highestaudio' | 'lowestaudio' | 'highestvideo' | 'lowestvideo'

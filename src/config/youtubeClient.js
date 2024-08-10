@@ -14,6 +14,11 @@ function getYoutubeClient() {
 let ytdlAgent = null;
 function getYtdlAgent() {
   if (!ytdlAgent) {
+    const agentOptions = {
+      headers: {
+        referer: "https://www.youtube.com/",
+      },
+    };
     ytdl.createAgent(
       [
         {
@@ -279,14 +284,7 @@ function getYtdlAgent() {
           id: 18,
         },
       ],
-      {
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
-          "Accept-Language": "en-US,en;q=0.9",
-          Referer: "https://www.youtube.com/",
-        },
-      }
+      agentOptions
     );
   }
   return ytdlAgent;
