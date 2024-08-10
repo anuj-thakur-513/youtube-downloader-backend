@@ -20,7 +20,7 @@ function getYtdlAgent() {
       },
     };
     ytdlAgent = ytdl.createAgent(
-      JSON.parse(fs.readFileSync("./youtubeClient.js")),
+      JSON.parse(fs.readFileSync("./youtubeCookies.js")),
       agentOptions
     );
   }
