@@ -26,34 +26,13 @@ async function downloadVideo(videoUrl, videoTitle, qualityItag) {
     let qualityLabels;
     switch (qualityItag) {
       case "High Quality":
-        qualityLabels = [
-          "4320p",
-          "4320p60",
-          "2160p",
-          "2160p60",
-          "2160p60 HDR",
-          "1440p",
-          "1440p60",
-          "1440p60 HDR",
-          "1080p",
-          "1080p60",
-          "1080p60 HDR",
-        ];
+        qualityLabels = ["4320p", "2160p", "1440p", "1080p"];
         break;
       case "Medium Quality":
-        qualityLabels = ["720p", "720p60", "720p60 HDR", "480p", "480p60 HDR"];
+        qualityLabels = ["720p", "480p"];
         break;
       case "Low Quality":
-        qualityLabels = [
-          "360p",
-          "360p60 HDR",
-          "270p",
-          "240p",
-          "240p60 HDR",
-          "144p",
-          "144p 15fps",
-          "144p60 HDR",
-        ];
+        qualityLabels = ["360p", "270p", "240p", "144p"];
         break;
       default:
         return null;
@@ -94,7 +73,7 @@ async function downloadVideo(videoUrl, videoTitle, qualityItag) {
 
   // Download video
   await new Promise((resolve, reject) => {
-    console.log(videoFormat);
+    console.log(videoFormat.itag);
     ytdl(videoUrl, { quality: videoFormat.itag })
       .pipe(fs.createWriteStream(videoPath))
       .on("finish", () => {

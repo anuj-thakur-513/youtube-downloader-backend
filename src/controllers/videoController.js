@@ -82,7 +82,6 @@ const handleGetVideoDetails = asyncHandler(async (req, res) => {
       { itag: "Low Quality", qualityLabel: "Low Quality" }
     );
   } else {
-    // TODO: don't return a quality if it doesn't have a quality Label
     const agent = getYtdlAgent();
     fetchedDetails = await ytdl.getInfo(url, { agent });
     details.title = fetchedDetails?.videoDetails?.title;
@@ -97,7 +96,8 @@ const handleGetVideoDetails = asyncHandler(async (req, res) => {
       return (
         quality?.container &&
         quality?.container.includes("mp4") &&
-        quality?.qualityLabel !== null
+        quality?.qualityLabel &&
+        quality.qualityLabel !== null
       );
     });
 
@@ -118,7 +118,12 @@ const handleGetVideoDetails = asyncHandler(async (req, res) => {
     });
 
     // Convert the map back to an array
-    const filteredQualities = Array.from(resolutionMap.values());
+    const filteredQualities = Array.from(resolutionMap.values()).sort(
+      (a, b) => {
+        // Sort by the resolution number extracted from qualityLabel (e.g., "1080p" -> 1080)
+        return parseInt(a.qualityLabel) - parseInt(b.qualityLabel);
+      }
+    );
 
     filteredQualities.forEach((quality) => {
       details.qualities.push({
